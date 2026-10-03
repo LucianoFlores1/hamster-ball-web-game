@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#14051f" />
+  <title>Carril Neón</title>
+  <link rel="stylesheet" href="./src/ui/style.css" />
+</head>
+<body>
+  <div id="app">
+    <canvas id="game" aria-label="Carril Neón"></canvas>
+    <div id="flash"></div>
+
+    <div id="hud" class="hidden">
+      <div id="score">0</div>
+      <div id="mult" class="level-0">
+        <span id="mult-value">x1</span>
+        <div id="mult-bar"><div id="mult-fill"></div></div>
+      </div>
+      <div id="graze-pop"></div>
+    </div>
+
+    <div id="menu" class="screen hidden">
+      <h1 class="title"><span>CARRIL</span><span>NEÓN</span></h1>
+      <div class="best-line">★ <span id="menu-best">0</span></div>
+      <div class="hint">
+        <div class="tap-icon" aria-hidden="true">👆</div>
+        <div class="hint-text">TAP · CLICK · SPACE</div>
+      </div>
+    </div>
+
+    <div id="paused" class="screen hidden">
+      <div class="big-icon" aria-hidden="true">⏸</div>
+      <div class="hint-text">TAP ▶</div>
+    </div>
+
+    <div id="over" class="screen hidden">
+      <div id="over-new" class="new-best hidden">★ NEW ★</div>
+      <div id="over-score" class="over-score">0</div>
+      <div class="best-line">★ <span id="over-best">0</span></div>
+      <div class="buttons">
+        <button id="btn-continue" class="btn btn-continue hidden" aria-label="Ver anuncio para continuar">
+          <span aria-hidden="true">▶︎</span><span class="btn-sub">AD · +1</span>
+        </button>
+        <button id="btn-replay" class="btn btn-replay" aria-label="Jugar de nuevo">
+          <span aria-hidden="true">↻</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="ad-wait" class="screen hidden">
+      <div class="spinner" aria-hidden="true"></div>
+    </div>
+
+    <button id="btn-mute" class="btn-mute" aria-label="Silenciar">🔊</button>
+  </div>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
