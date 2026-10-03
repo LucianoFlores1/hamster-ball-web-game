@@ -1,0 +1,22 @@
+{
+  "name": "carril-neon",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "build:youtube": "vite build --mode youtube --outDir dist-youtube",
+    "build:crazygames": "vite build --mode crazygames --outDir dist-crazygames",
+    "preview": "vite preview --host",
+    "test": "vitest run",
+    "zip": "node scripts/zip.js"
+  },
+  "dependencies": {
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "vite": "^8.3.2",
+    "vitest": "^5.0.3"
+  }
+}
