@@ -1,13 +1,13 @@
 # Carril Neón — Documento de diseño
 
-> Nombre de trabajo. Fecha: 29/09/2026. Estado: aprobado en brainstorming.
+> Nombre de trabajo. Creado: 29/09/2026 (fecha mal asumida en el brainstorming). Revisado: 02/10/2026. Estado: aprobado.
 > Este documento es la fuente de verdad para Claude Code. Antes de escribir código, generar un plan de implementación a partir de él.
 
 ## 1. Objetivo y contexto
 
 Juego web arcade de un solo toque, hecho en ~6–12 horas, para ganar algo de dinero con anuncios.
 
-- **Plataforma principal:** CrazyGames (lanzamiento básico, subida el 01/10/2026).
+- **Plataforma principal:** CrazyGames (lanzamiento básico, subida al terminar el cronograma).
 - **Plataforma secundaria:** YouTube Playables (el desarrollador aún no tiene acceso; se aplica en paralelo, o vía un socio oficial como Playgama, a evaluar).
 - **Principio clave:** el juego cumple desde el día 1 los requisitos técnicos de YouTube Playables, aunque se publique primero en CrazyGames.
 - **Desarrollador:** programa con soltura, sin experiencia previa en juegos.
@@ -28,6 +28,13 @@ Juego web arcade de un solo toque, hecho en ~6–12 horas, para ganar algo de di
   - "Jugar de nuevo" (instantáneo),
   - "Ver anuncio para continuar" (una vez por partida, SOLO si el adaptador confirma que hay anuncio con premio disponible). Al continuar: se eliminan los bloques cercanos y hay ~1,5 s de invulnerabilidad.
 - **Duración objetivo:** 30 s a 2 min por partida.
+
+### Reglas precisas (obligatorias, resuelven ambigüedades)
+
+1. **Carril lógico:** al tocar empieza la animación de cambio (0,15 s), pero el carril lógico de la pelota (el que se usa para choques) cambia al **50 % de la animación** (0,075 s después del toque). Un bloque del carril de origen que llega antes de ese instante es choque.
+2. **Roce al ras:** cuenta si, en el momento del toque, el bloque del **carril que dejás** tiene un tiempo hasta el impacto menor a 0,25 s (y mayor a 0,075 s, si no es choque por la regla 1). Se cobra **una sola vez por bloque** (marcar el bloque como "rozado"). Si el carril de destino tiene un bloque que llega antes de que la pelota termine el cambio, es choque, no roce.
+3. **Separación en tiempo, no en distancia:** toda separación entre bloques se define y se valida en segundos según la velocidad actual. La separación inicial debe ser claramente menor al tiempo de reinicio del multiplicador (valor inicial: 1,2 s entre bloques, contra 3 s de reinicio), para que el multiplicador pueda subir desde el principio.
+4. **Siempre hay camino, medido en tiempo:** en cualquier patrón (incluidos los zigzags), el tiempo entre dos bloques consecutivos de carriles distintos debe ser ≥ 0,15 s (cambio) + margen de reacción. Valor inicial: **mínimo 0,4 s**, ajustable en `config.js`. La prueba automática verifica esta separación **a la velocidad máxima**, no solo que exista un carril libre.
 
 Todos los valores numéricos van en un único archivo de configuración (`config.js`) para ajustarlos jugando.
 
@@ -119,7 +126,15 @@ Adaptadores:
 └─ tests/                  (Vitest para la lógica pura)
 ```
 
-**Pruebas:** la lógica pura (roce, multiplicador, puntaje, dificultad, que los patrones siempre dejen camino, adaptador local) se desarrolla con pruebas automáticas (Vitest). Lo visual y la sensación de juego se prueban a mano, en navegador de escritorio y en un celular real (`vite --host` en la misma red WiFi).
+### Bucle y tiempo
+
+- El tiempo entre cuadros (`dt`) se limita a **50 ms** como máximo, para que al volver de una pausa o de un tirón los bloques no salten de golpe.
+- `dt` pasa por un **factor de escala de tiempo** (`timeScale`, normalmente 1). La cámara lenta del choque es bajar ese factor (por ejemplo a 0,2) durante ~0,4 s reales.
+- **Pausa:** en YouTube llega por `onPause`/`onResume`; el adaptador local (y el de CrazyGames si no la provee) escucha `document.visibilitychange`.
+- Three.js se importa con imports nombrados (`import { Mesh, ... } from 'three'`).
+- Los anuncios con premio pueden no existir en ninguna plataforma: con `canShowRewarded()` en `false`, el juego debe estar completo.
+
+**Pruebas:** la lógica pura (carril lógico, roce y su cobro único, multiplicador y su reinicio, puntaje, dificultad, separación mínima en tiempo a velocidad máxima, adaptador local) se desarrolla con pruebas automáticas (Vitest). Lo visual y la sensación de juego se prueban a mano, en navegador de escritorio y en un celular real (`vite --host` en la misma red WiFi).
 
 **Build:** `vite build` → carpeta `dist/` con rutas relativas → ZIP. Three.js incluido en el paquete, nunca desde CDN.
 
@@ -139,19 +154,19 @@ Adaptadores:
 
 ### CrazyGames
 
-- [ ] Lanzamiento básico (01/10): no requiere SDK.
+- [ ] Lanzamiento básico: no requiere SDK.
 - [ ] Lanzamiento completo (si nos invitan): integrar SDK, avisar inicio/fin de partida, anuncio con premio para continuar, anuncio entre partidas cada 3 derrotas como máximo. **Verificar nombres exactos de funciones en su documentación vigente al implementar.**
 - [ ] Preparar portada/miniaturas en los tamaños que pida su portal.
 
 ## 7. Cronograma (≈8–9 h)
 
-Hoy (29/09):
+Día 1:
 
 1. **(1 h) Base:** proyecto Vite + Three.js, escena, cámara responsiva, ruta y cuadrícula en movimiento.
 2. **(1,5 h) Núcleo jugable:** pelota, cambio de carril, pool de bloques, generación de patrones, choque, reinicio. *Hito: se puede jugar, aunque se vea feo.*
 3. **(1,5 h) Profundidad:** roce al ras, multiplicador, puntaje, curva de dificultad, zigzags (con pruebas de la lógica pura).
 
-Mañana (30/09):
+Día 2:
 
 4. **(1,5 h) Interfaz y plataforma:** menú, HUD, pantalla de fin, récord, adaptador local, pausa, botón de silencio.
 5. **(1,5 h) Sensación:** estela, chispas, sacudida, FOV, color de cuadrícula, choque con cámara lenta, efectos de sonido.
@@ -160,7 +175,7 @@ Mañana (30/09):
 
 **Si el tiempo aprieta, se recorta en este orden:** música → cámara lenta al chocar → montañas → cambio de color de cuadrícula. El núcleo, el roce al ras y el guardado nunca se recortan.
 
-01/10: subir a CrazyGames (lanzamiento básico) y enviar el formulario de interés de YouTube Playables (o evaluar Playgama).
+Día siguiente al terminar: subir a CrazyGames (lanzamiento básico) y enviar el formulario de interés de YouTube Playables (o evaluar Playgama).
 
 ## 8. Fuera de alcance (NO hacer en esta versión)
 
@@ -172,6 +187,7 @@ Tiendas o monedas, personajes desbloqueables, tablas de récords online, niveles
 - El roce al ras se siente claro y gratificante; el multiplicador es visible.
 - 60 fps estables en celular de gama media.
 - El récord persiste al recargar.
-- El juego se pausa al cambiar de pestaña.
+- El juego se pausa al cambiar de pestaña, en todas las plataformas, y al volver no hay saltos.
+- Ningún roce se cobra dos veces y nunca se genera un patrón imposible a velocidad máxima.
 - Con el adaptador local, el botón de continuar no aparece (o simula el anuncio en modo desarrollo).
 - `vite build` genera un paquete con rutas relativas que funciona abriéndolo desde un servidor estático.
