@@ -25,6 +25,15 @@ describe('multiplicador', () => {
     expect(multiplier(s, CONFIG)).toBe(1);
   });
 
+  it('cuenta los roces seguidos y los reinicia al perder el multiplicador', () => {
+    const s = createScore();
+    for (let i = 0; i < 8; i++) registerGraze(s, CONFIG);
+    expect(s.combo).toBe(8);
+    tickMultiplier(s, 3, CONFIG);
+    expect(s.combo).toBe(0);
+    expect(s.grazes).toBe(8);
+  });
+
   it('un roce reinicia el reloj de 3 s', () => {
     const s = createScore();
     registerGraze(s, CONFIG);

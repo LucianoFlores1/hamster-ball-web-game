@@ -59,7 +59,9 @@ function processTap(world) {
   if (g) {
     g.grazed = true;
     const bonus = registerGraze(world.score, cfg);
-    world.events.push({ type: 'graze', level: world.score.level, bonus, lane: leaving, blockId: g.id });
+    world.events.push({
+      type: 'graze', level: world.score.level, combo: world.score.combo, bonus, lane: leaving, blockId: g.id,
+    });
   }
 }
 
@@ -132,6 +134,7 @@ export function revive(world) {
   world.pendingTaps = 0;
   world.score.level = 0;
   world.score.sinceGraze = 0;
+  world.score.combo = 0;
 }
 
 export function activeBlocks(world) {

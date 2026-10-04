@@ -65,6 +65,11 @@ export const CONFIG = {
     shakeOnGraze: 0.18,
     sparksPerGraze: 26,
     replayLockout: 0.5, // segundos tras el fin en que se ignoran toques (evita reinicios accidentales)
+    grazeSlowScale: 0.35, // micro cámara lenta en cada roce (1 = desactivada)…
+    grazeSlowDuration: 0.06, // …durante estos segundos reales
+    hitStop: 0.08, // congelamiento al chocar, antes de la cámara lenta
+    fovPunch: 3, // grados de golpe de FOV por roce (+0,6 por nivel)
+    haptics: true, // vibración en celulares Android
   },
 
   // Bucle

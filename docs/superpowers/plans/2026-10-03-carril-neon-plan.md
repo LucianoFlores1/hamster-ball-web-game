@@ -48,3 +48,33 @@
 4. YouTube: verificar la URL del SDK y los nombres de la API en la documentación vigente
    (`ytgame.game.*`, `ytgame.system.*`, `ytgame.engagement.sendScore`) y probar en su entorno de pruebas.
 5. CrazyGames (lanzamiento completo, si invitan): verificar nombres del SDK v3 en su documentación.
+
+## Pasada de "juice" (04/10/2026)
+
+**Música** (`src/audio/music.js`): pista synthwave por capas a 118 BPM (La menor, Fa, Do, Sol).
+Pad, arpegio con eco, bajo, bombo con efecto de bombeo, platillos, caja y melodía. Las capas
+entran con el multiplicador y la velocidad; el filtro se abre al subir de nivel y se cierra
+("bajo el agua") al chocar. Expone el pulso para que lo visual lata en tiempo.
+
+**Sonido** (`src/audio/sfx.js`): compresor final; cambio de carril con paneo hacia el carril
+destino; roces con notas que suben por la escala pentatónica con cada roce seguido; acorde y
+barrido al llegar a x8; sonido de multiplicador perdido; choque con astillas de vidrio;
+barridos de inicio y de continuar; fanfarria de récord; conteo del puntaje; clic de botones.
+
+**Visual**: todo late con la música (cuadrícula, bordes, sol, bloques, pelota). Pelota con
+deformación e inclinación al cambiar de carril, rebote con resorte, color según el multiplicador
+(también la estela) y flotación en el menú. Bloques que caen del cielo con rebote y giro, se
+sacuden al ser rozados y el que te golpea queda rojo. Ondas expansivas, explosiones de
+partículas, líneas de velocidad, estrellas titilantes. Cámara con vuelo en el menú, bajada al
+empezar, golpe de FOV en roces, inclinación y acercamiento al chocar.
+
+**Sensación de juego**: micro cámara lenta en cada roce, congelamiento corto antes de la cámara
+lenta del choque, vibración en Android, cartel de nivel (x2…x6, "MAX x8"), récord superado en
+plena partida.
+
+**Interfaz**: título que se enciende como un tubo de neón, pantallas con entrada animada,
+puntaje final que cuenta desde 0, botones que aparecen con rebote, botón de continuar que
+pulsa, viñeta de color según el multiplicador, barra del multiplicador que parpadea cuando
+está por perderse. Respeta `prefers-reduced-motion`.
+
+Todo ajustable en `config.js` → `fx` (cámara lenta de roce, congelamiento, golpe de FOV, vibración).

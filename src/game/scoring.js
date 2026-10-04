@@ -1,7 +1,7 @@
 // Puntaje y multiplicador. Lógica pura.
 
 export function createScore() {
-  return { points: 0, level: 0, sinceGraze: 0, grazes: 0 };
+  return { points: 0, level: 0, sinceGraze: 0, grazes: 0, combo: 0 };
 }
 
 export function multiplier(s, cfg) {
@@ -18,6 +18,7 @@ export function registerGraze(s, cfg) {
   s.level = Math.min(s.level + 1, cfg.multiplier.levels.length - 1);
   s.sinceGraze = 0;
   s.grazes++;
+  s.combo++; // roces seguidos sin perder el multiplicador
   const bonus = cfg.graze.bonus * multiplier(s, cfg);
   s.points += bonus;
   return bonus;
@@ -30,6 +31,7 @@ export function tickMultiplier(s, dt, cfg) {
   if (s.sinceGraze >= cfg.multiplier.resetAfter) {
     s.level = 0;
     s.sinceGraze = 0;
+    s.combo = 0;
     return true;
   }
   return false;

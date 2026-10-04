@@ -1,10 +1,12 @@
-// Escenario synthwave: cielo, sol a franjas, montañas, cuadrícula en movimiento y ruta.
+// Escenario synthwave: cielo estrellado, sol a franjas, montañas, cuadrícula en movimiento y ruta.
 // Todo se crea una sola vez; durante la partida solo se mueven posiciones y colores.
+// Todo late con la música (cuadrícula, bordes de la ruta, sol) y cambia de color con el multiplicador.
 
 import {
   Scene, Color, Fog, CanvasTexture, SRGBColorSpace, Mesh, Group, PlaneGeometry, CircleGeometry,
   ShaderMaterial, MeshBasicMaterial, LineBasicMaterial, LineSegments, BufferGeometry,
   Float32BufferAttribute, Shape, ShapeGeometry, Line, HemisphereLight, DirectionalLight,
+  Points, PointsMaterial, BufferAttribute,
 } from 'three';
 import { CONFIG } from '../config.js';
 
@@ -13,6 +15,41 @@ const GRID_CELL = 4;
 const DASH_PERIOD = 6;
 
 export const GRID_COLORS = ['#7b2fff', '#a32cff', '#ff2fd0', '#ff2fd0', '#ff6a5c', '#ffc23d'].map((c) => new Color(c));
+const EDGE_COLORS = ['#ff2fd0', '#ff2fd0', '#ff4fdc', '#ff6fa0', '#ff8a5c', '#ffd25a'].map((c) => new Color(c));
+const STARS = 160;
+
+// Estrellas en una cúpula lejana, titilando (solo cambia su brillo).
+function makeStars() {
+  const pos = new Float32Array(STARS * 3);
+  const col = new Float32Array(STARS * 3);
+  const phase = new Float32Array(STARS);
+  for (let i = 0; i < STARS; i++) {
+    const a = (Math.random() - 0.5) * Math.PI * 1.4;
+    const h = 0.08 + Math.random() * 0.9;
+    const r = 500;
+    pos[i * 3] = Math.sin(a) * r;
+    pos[i * 3 + 1] = 40 + h * 260;
+    pos[i * 3 + 2] = -Math.cos(a) * r;
+    phase[i] = Math.random() * Math.PI * 2;
+  }
+  const geo = new BufferGeometry();
+  geo.setAttribute('position', new BufferAttribute(pos, 3));
+  geo.setAttribute('color', new BufferAttribute(col, 3));
+  const points = new Points(geo, new PointsMaterial({ size: 2.2, sizeAttenuation: false, vertexColors: true, fog: false }));
+  points.renderOrder = -3;
+  return {
+    points,
+    update(time) {
+      for (let i = 0; i < STARS; i++) {
+        const b = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(time * (1 + (i % 5) * 0.4) + phase[i]));
+        col[i * 3] = b;
+        col[i * 3 + 1] = b * 0.85;
+        col[i * 3 + 2] = b;
+      }
+      geo.attributes.color.needsUpdate = true;
+    },
+  };
+}
 
 function skyTexture() {
   const c = document.createElement('canvas');
@@ -167,7 +204,7 @@ function makeRoad() {
   dashes.position.y = 0.03;
   group.add(dashes);
 
-  return { group, dashes };
+  return { group, dashes, edgeMat };
 }
 
 export function createWorldScene() {
@@ -181,12 +218,14 @@ export function createWorldScene() {
   scene.add(sunLight);
 
   const sun = makeSun();
+  const stars = makeStars();
   const mountains = makeMountains();
   const grid = makeGrid();
   const road = makeRoad();
-  scene.add(sun, mountains, grid.group, road.group);
+  scene.add(stars.points, sun, mountains, grid.group, road.group);
 
   const gridColor = GRID_COLORS[0].clone();
+  const edgeColor = EDGE_COLORS[0].clone();
   let targetLevel = 0;
 
   return {
@@ -195,12 +234,19 @@ export function createWorldScene() {
       targetLevel = level;
     },
     // distance: distancia total recorrida (desplaza cuadrícula y línea central)
-    update(distance, dt, time) {
+    // beatPulse: 1 justo en el golpe del bombo, cae a 0 antes del siguiente
+    update(distance, dt, time, beatPulse) {
       grid.across.position.z = distance % GRID_CELL;
       road.dashes.position.z = distance % DASH_PERIOD;
       sun.material.uniforms.uTime.value = time;
-      gridColor.lerp(GRID_COLORS[targetLevel], Math.min(1, dt * 6));
-      grid.material.color.copy(gridColor);
+      sun.scale.setScalar(70 * (1 + beatPulse * 0.015));
+      stars.update(time);
+
+      const k = Math.min(1, dt * 6);
+      gridColor.lerp(GRID_COLORS[targetLevel], k);
+      grid.material.color.copy(gridColor).multiplyScalar(0.75 + beatPulse * 0.6);
+      edgeColor.lerp(EDGE_COLORS[targetLevel], k);
+      road.edgeMat.color.copy(edgeColor).multiplyScalar(0.85 + beatPulse * 0.5);
     },
   };
 }
