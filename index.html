@@ -1,15 +1,16 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <meta name="theme-color" content="#14051f" />
-  <title>Carril Neón</title>
+  <title>ZipZapp</title>
+  <meta name="description" content="ZipZapp: a one-tap neon arcade game. Dodge at the last second to multiply your score." />
   <link rel="stylesheet" href="./src/ui/style.css" />
 </head>
 <body>
   <div id="app">
-    <canvas id="game" aria-label="Carril Neón"></canvas>
+    <canvas id="game" aria-label="ZipZapp"></canvas>
     <div id="vignette"></div>
     <div id="flash"></div>
     <div id="banner"></div>
@@ -24,28 +25,29 @@
     </div>
 
     <div id="menu" class="screen hidden">
-      <h1 class="title"><span class="t1">CARRIL</span><span class="t2">NEÓN</span></h1>
+      <h1 class="title"><span class="t1">ZIP</span><span class="t2">ZAPP</span></h1>
+      <div class="tagline">DODGE LATE · SCORE BIG</div>
       <div class="best-line">★ <span id="menu-best">0</span></div>
       <div class="hint">
         <div class="tap-icon" aria-hidden="true">👆</div>
-        <div class="hint-text">TAP · CLICK · SPACE</div>
+        <div class="hint-text">TAP TO PLAY</div>
       </div>
     </div>
 
     <div id="paused" class="screen hidden">
       <div class="big-icon" aria-hidden="true">⏸</div>
-      <div class="hint-text">TAP ▶</div>
+      <div class="hint-text">TAP TO RESUME</div>
     </div>
 
     <div id="over" class="screen hidden">
-      <div id="over-new" class="new-best hidden">★ NEW ★</div>
+      <div id="over-new" class="new-best hidden">★ NEW BEST ★</div>
       <div id="over-score" class="over-score">0</div>
       <div class="best-line">★ <span id="over-best">0</span></div>
       <div class="buttons">
-        <button id="btn-continue" class="btn btn-continue hidden" aria-label="Ver anuncio para continuar">
-          <span aria-hidden="true">▶︎</span><span class="btn-sub">AD · +1</span>
+        <button id="btn-continue" class="btn btn-continue hidden" aria-label="Watch an ad to continue">
+          <span aria-hidden="true">▶︎</span><span class="btn-sub">AD · CONTINUE</span>
         </button>
-        <button id="btn-replay" class="btn btn-replay" aria-label="Jugar de nuevo">
+        <button id="btn-replay" class="btn btn-replay" aria-label="Play again">
           <span aria-hidden="true">↻</span>
         </button>
       </div>
@@ -55,7 +57,7 @@
       <div class="spinner" aria-hidden="true"></div>
     </div>
 
-    <button id="btn-mute" class="btn-mute" aria-label="Silenciar">🔊</button>
+    <button id="btn-mute" class="btn-mute" aria-label="Mute">🔊</button>
   </div>
   <script type="module" src="./src/main.js"></script>
 </body>

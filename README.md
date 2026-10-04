@@ -1,8 +1,8 @@
-# Carril Neón
+# ZipZapp
 
 Juego web arcade de un toque, estética synthwave: una pelota avanza por dos carriles y hay
 que esquivar bloques. Cambiar de carril al último momento (roce al ras) sube el multiplicador
-hasta x8.
+hasta x8. Los textos del juego están en inglés. Nombre de trabajo anterior: "Carril Neón".
 
 - Diseño: [`docs/superpowers/specs/2026-09-29-carril-neon-design.md`](docs/superpowers/specs/2026-09-29-carril-neon-design.md)
 - Plan y estado: [`docs/superpowers/plans/2026-10-03-carril-neon-plan.md`](docs/superpowers/plans/2026-10-03-carril-neon-plan.md)
@@ -15,7 +15,7 @@ npm run dev               # servidor de desarrollo, accesible desde el celular e
 npm test                  # pruebas de la lógica pura (Vitest)
 
 npm run build             # dist/ — sin SDKs (itch.io, CrazyGames lanzamiento básico)
-npm run zip               # dist/ → carril-neon.zip
+npm run zip               # dist/ → zipzapp.zip
 
 npm run build:youtube     # dist-youtube/ con el SDK de YouTube Playables
 node scripts/zip.js dist-youtube

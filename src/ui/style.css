@@ -83,13 +83,19 @@ html, body {
 #paused { background: rgba(20, 5, 31, 0.5); }
 
 .title {
-  margin: 0; display: flex; flex-direction: column; line-height: 0.95;
+  margin: 0; display: flex; flex-direction: row; line-height: 0.95;
   font-size: clamp(44px, 13vmin, 110px); font-weight: 800; letter-spacing: 0.06em;
   font-style: italic;
 }
 .title span:first-child { color: var(--cyan); text-shadow: 0 0 18px var(--cyan); }
 .title span:last-child { color: var(--magenta); text-shadow: 0 0 18px var(--magenta); }
 
+.tagline {
+  margin-top: -1vmin; font-size: clamp(10px, 3.2vmin, 18px); letter-spacing: 0.24em; color: #fdf2ff;
+  white-space: nowrap;
+  opacity: 0.8; text-shadow: 0 0 8px var(--magenta);
+}
+#menu.enter .tagline { animation: slideUp 0.5s ease-out 0.45s backwards; }
 .best-line { font-size: clamp(16px, 4vmin, 26px); color: var(--gold); text-shadow: 0 0 8px rgba(255, 194, 61, 0.6); }
 .hint { margin-top: 4vmin; display: flex; flex-direction: column; align-items: center; gap: 6px; animation: pulse 1.4s ease-in-out infinite; }
 .tap-icon { font-size: clamp(30px, 8vmin, 54px); }
@@ -184,7 +190,7 @@ html, body {
 .screen.enter { animation: screenIn 0.35s ease-out; }
 @keyframes screenIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* Título: tubo de neón que se enciende titilando, y después respira */
+/* Logo: tubo de neón que se enciende titilando, y después respira */
 #menu.enter .title .t1 { animation: neonOn 1.1s linear both, breathe 3s ease-in-out 1.1s infinite; }
 #menu.enter .title .t2 { animation: neonOn 1.3s linear 0.25s both, breathe 3s ease-in-out 1.6s infinite; }
 @keyframes neonOn {

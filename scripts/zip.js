@@ -1,12 +1,12 @@
 // Empaqueta una carpeta de build en un ZIP (sin dependencias).
-// Uso: node scripts/zip.js [carpeta=dist] [salida=carril-neon.zip]
+// Uso: node scripts/zip.js [carpeta=dist] [salida=zipzapp.zip]
 
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import { deflateRawSync, crc32 } from 'node:zlib';
 
 const dir = process.argv[2] || 'dist';
-const out = process.argv[3] || `carril-neon${dir === 'dist' ? '' : `-${dir.replace(/^dist-/, '')}`}.zip`;
+const out = process.argv[3] || `zipzapp${dir === 'dist' ? '' : `-${dir.replace(/^dist-/, '')}`}.zip`;
 
 function walk(d) {
   return readdirSync(d).flatMap((name) => {

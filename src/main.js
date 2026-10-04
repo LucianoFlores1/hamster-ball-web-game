@@ -165,7 +165,7 @@ async function boot() {
   platform.onResume(() => game.platformResumed());
 
   bindInput(game);
-  if (import.meta.env.DEV) window.__carril = { world, game, platform };
+  if (import.meta.env.DEV) window.__game = { world, game, platform };
 
   game.showMenu();
   platform.gameReady();

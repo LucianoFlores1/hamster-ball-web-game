@@ -1,7 +1,8 @@
 // Adaptador local: localStorage, sin anuncios. Sirve para desarrollo, itch.io y el
 // lanzamiento básico de CrazyGames. Con `fakeAds` simula un anuncio con premio.
 
-const KEY = 'carril-neon-save';
+const KEY = 'zipzapp-save';
+const LEGACY_KEY = 'carril-neon-save'; // nombre anterior del juego: se sigue leyendo
 
 export function createLocalAdapter({
   storage = globalThis.localStorage,
@@ -18,7 +19,7 @@ export function createLocalAdapter({
     gameplayStop() {},
     async loadData() {
       try {
-        return storage?.getItem(KEY) ?? null;
+        return storage?.getItem(KEY) ?? storage?.getItem(LEGACY_KEY) ?? null;
       } catch {
         return null;
       }

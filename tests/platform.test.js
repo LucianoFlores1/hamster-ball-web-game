@@ -29,6 +29,13 @@ describe('adaptador local', () => {
     expect(decodeSave(await b.loadData())).toEqual({ version: SAVE_VERSION, best: 1234, muted: true });
   });
 
+  it('recupera el récord guardado con el nombre anterior del juego', async () => {
+    const storage = memoryStorage();
+    storage.setItem('carril-neon-save', encodeSave({ best: 777, muted: false }));
+    const a = createLocalAdapter({ storage, doc: fakeDoc() });
+    expect(decodeSave(await a.loadData()).best).toBe(777);
+  });
+
   it('sobrevive a un almacenamiento bloqueado', async () => {
     const storage = { getItem() { throw new Error('bloqueado'); }, setItem() { throw new Error('bloqueado'); } };
     const a = createLocalAdapter({ storage, doc: fakeDoc() });

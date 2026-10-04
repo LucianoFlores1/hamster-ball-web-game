@@ -3,7 +3,7 @@
 // Nombres verificados contra las definiciones de tipos del SDK v3; revisar la
 // documentación vigente de CrazyGames antes del lanzamiento completo.
 
-const KEY = 'carril-neon-save';
+const KEY = 'zipzapp-save';
 
 export function isCrazyGames() {
   return typeof window !== 'undefined' && !!window.CrazyGames?.SDK;

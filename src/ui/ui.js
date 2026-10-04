@@ -169,7 +169,7 @@ export function createUI() {
     flash,
     setMuted(muted, animate = false) {
       el.btnMute.textContent = muted ? '🔇' : '🔊';
-      el.btnMute.setAttribute('aria-label', muted ? 'Activar sonido' : 'Silenciar');
+      el.btnMute.setAttribute('aria-label', muted ? 'Unmute' : 'Mute');
       if (animate) restart(el.btnMute, 'spin');
     },
   };
